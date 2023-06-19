@@ -264,46 +264,106 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: _targetFocus.enableOverlayTab
-          ? () => _tapHandler(overlayTap: true)
-          : null,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (_, child) {
-          _progressAnimated = _curvedAnimation.value;
-          return Stack(
-            children: <Widget>[
-              SizedBox(
-                width: double.maxFinite,
-                height: double.maxFinite,
-                child: CustomPaint(
-                  painter: _getPainter(_targetFocus),
-                ),
-              ),
-              Positioned(
-                left: left,
-                top: top,
-                child: InkWell(
-                  borderRadius: _betBorderRadiusTarget(),
-                  onTapDown: _tapHandlerForPosition,
-                  onTap: _targetFocus.enableTargetTab
-                      ? () => _tapHandler(targetTap: true)
-
-                      /// Essential for collecting [TapDownDetails]. Do not make [null]
-                      : () {},
-                  child: Container(
-                    color: Colors.transparent,
-                    width: width,
-                    height: height,
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final Widget mainWidget = _targetFocus.allowBackgroundInteraction
+        ? AnimatedBuilder(
+            animation: _controller,
+            builder: (_, child) {
+              _progressAnimated = _curvedAnimation.value;
+              return Stack(
+                children: <Widget>[
+                  IgnorePointer(
+                    child: SizedBox(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: CustomPaint(
+                        painter: _getPainter(_targetFocus),
+                      ),
+                    ),
                   ),
-                ),
-              )
-            ],
+                  if (top > 0)
+                    Positioned(
+                      top: 0,
+                      child: AbsorbPointer(
+                        child: SizedBox(
+                          width: screenWidth,
+                          height: top,
+                        ),
+                      ),
+                    ),
+                  if ((top + height) < screenHeight)
+                    Positioned(
+                      top: (top + height),
+                      child: AbsorbPointer(
+                        child: SizedBox(
+                          width: screenWidth,
+                          height: screenHeight - (top + height),
+                        ),
+                      ),
+                    ),
+                  if (left > 0)
+                    Positioned(
+                      left: 0,
+                      child: AbsorbPointer(
+                        child: SizedBox(
+                          width: left,
+                          height: screenHeight,
+                        ),
+                      ),
+                    ),
+                  if ((left + width) < screenWidth)
+                    Positioned(
+                      left: (left + width),
+                      child: AbsorbPointer(
+                        child: SizedBox(
+                          width: screenWidth - (left + width),
+                          height: screenHeight,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          )
+        : AnimatedBuilder(
+            animation: _controller,
+            builder: (_, child) {
+              _progressAnimated = _curvedAnimation.value;
+              return Stack(
+                children: <Widget>[
+                  Container(
+                    width: double.maxFinite,
+                    height: double.maxFinite,
+                    child: CustomPaint(
+                      painter: _getPainter(_targetFocus),
+                    ),
+                  ),
+                  Positioned(
+                    left: left,
+                    top: top,
+                    child: InkWell(
+                      borderRadius: _betBorderRadiusTarget(),
+                      onTap: _targetFocus.enableTargetTab
+                          ? () => _tapHandler(targetTap: true)
+                          : null,
+                      child: Container(
+                        color: Colors.transparent,
+                        width: width,
+                        height: height,
+                      ),
+                    ),
+                  )
+                ],
+              );
+            },
           );
-        },
-      ),
-    );
+    return _targetFocus.enableOverlayTab
+        ? InkWell(
+            onTap: () => _tapHandler(overlayTap: true),
+            child: mainWidget,
+          )
+        : mainWidget;
   }
 
   @override

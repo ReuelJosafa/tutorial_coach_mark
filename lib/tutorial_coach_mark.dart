@@ -58,7 +58,10 @@ class TutorialCoachMark {
     this.pulseEnable = true,
     this.skipWidget,
     this.showSkipInLastTarget = true,
-  }) : assert(opacityShadow >= 0 && opacityShadow <= 1);
+  }) : assert(opacityShadow >= 0 &&
+            opacityShadow <= 1 &&
+            (targets.any((tF) => tF.allowBackgroundInteraction) &&
+                pulseEnable == false));
 
   OverlayEntry _buildOverlay({bool rootOverlay = false}) {
     return OverlayEntry(
