@@ -332,7 +332,7 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
               _progressAnimated = _curvedAnimation.value;
               return Stack(
                 children: <Widget>[
-                  Container(
+                  SizedBox(
                     width: double.maxFinite,
                     height: double.maxFinite,
                     child: CustomPaint(
