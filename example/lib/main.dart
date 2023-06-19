@@ -247,6 +247,7 @@ class MyHomePageState extends State<MyHomePage> {
       onSkip: () {
         print("skip");
       },
+      themeData: Theme.of(context),
     );
   }
 
