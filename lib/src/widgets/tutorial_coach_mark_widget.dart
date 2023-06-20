@@ -69,7 +69,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
 
   @override
   Widget build(BuildContext context) {
-    refresh();
+    autoRefresh();
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -281,8 +281,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
   @override
   void previous() => _focusLightKey.currentState?.previous();
 
-  void refresh() {
-    setState(() {});
+  void autoRefresh() {
     _focusLightKey.currentState?.refresh();
   }
 }
