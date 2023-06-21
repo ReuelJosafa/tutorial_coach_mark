@@ -125,4 +125,6 @@ class TutorialCoachMark {
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
+
+  int? get currentTargetIndex => _widgetKey.currentState?.currentTargetIndex;
 }

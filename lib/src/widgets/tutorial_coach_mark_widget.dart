@@ -284,4 +284,6 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
   void autoRefresh() {
     _focusLightKey.currentState?.refresh();
   }
+
+  int? get currentTargetIndex => _focusLightKey.currentState?.currentTargetIndex;
 }

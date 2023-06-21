@@ -99,6 +99,8 @@ abstract class AnimatedFocusLightState extends State<AnimatedFocusLight>
 
   void previous() => _tapHandler(goNext: false);
 
+  int get currentTargetIndex => _currentFocus;
+
   Future _tapHandler({
     bool goNext = true,
     bool targetTap = false,
